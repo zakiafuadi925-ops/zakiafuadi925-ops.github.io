@@ -1,44 +1,21 @@
-<<<<<<< HEAD
 import { useState, useEffect, useRef } from "react";
-=======
-import React, { useState, useEffect, useRef } from "react";
->>>>>>> 52d392f (update App and config)
 import {
   Terminal,
   Code2,
   Cpu,
-<<<<<<< HEAD
   GitBranch,
-=======
-  Database,
-  Server,
-  GitBranch,
-  Globe,
-  ExternalLink,
->>>>>>> 52d392f (update App and config)
   Mail,
   Phone,
   ChevronRight,
   Layers,
   ShieldCheck,
   Zap,
-<<<<<<< HEAD
   Activity,
-=======
-  Monitor,
-  Activity,
-  Command,
-  Search,
->>>>>>> 52d392f (update App and config)
   Sparkles,
   CheckCircle2,
   Copy,
   Check,
   ArrowUpRight,
-<<<<<<< HEAD
-=======
-  Filter,
->>>>>>> 52d392f (update App and config)
 } from "lucide-react";
 
 // --- CUSTOM SVG BRAND ICONS ---
