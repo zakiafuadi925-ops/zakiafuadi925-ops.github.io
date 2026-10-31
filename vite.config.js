@@ -5,6 +5,7 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [tailwindcss(), react()],
+  base: '/',
   resolve: {
     dedupe: ['react', 'react-dom'],
   },
