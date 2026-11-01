@@ -5,7 +5,7 @@
 
   [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live_Site-00f0ff?style=for-the-badge&logo=googlechrome&logoColor=black)](https://zakiafuadi925-ops.github.io)
   [![GitHub](https://img.shields.io/badge/GitHub-zakiafuadi925--ops-121226?style=for-the-badge&logo=github&logoColor=white)](https://github.com/zakiafuadi925-ops)
-  [![LinkedIn](https://img.shields.io/badge/LinkedIn-Zaki_Afuadi-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/zakiafuadi)
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-Zakia_fuadi-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/zakiafuadi)
   [![Email](https://img.shields.io/badge/Email-zakiafuadi925%40gmail.com-ff00e5?style=for-the-badge&logo=gmail&logoColor=white)](mailto:zakiafuadi925@gmail.com)
 
   <p align="center">
