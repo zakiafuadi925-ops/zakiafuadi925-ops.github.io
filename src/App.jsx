@@ -3,7 +3,6 @@ import {
   Terminal,
   Code2,
   Cpu,
-  GitBranch,
   Mail,
   Phone,
   ChevronRight,
@@ -15,9 +14,12 @@ import {
   Palette,
 } from "lucide-react";
 import { PROJECTS } from "./data/projects";
+import { TRANSLATIONS } from "./data/translations";
 import ProjectGallery from "./components/ProjectGallery";
 import TechMarquee from "./components/TechMarquee";
 import ContactModal from "./components/ContactModal";
+import GithubStatsSection from "./components/GithubStatsSection";
+import LanguageToggle from "./components/LanguageToggle";
 
 // --- CUSTOM SVG BRAND ICONS ---
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -175,11 +177,15 @@ export default function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("zack_theme") || "cyberpunk";
   });
+  const [lang, setLang] = useState(() => {
+    return localStorage.getItem("zack_lang") || "en";
+  });
   const [techCategory, setTechCategory] = useState("all");
   const [copiedLink, setCopiedLink] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   const isCyber = theme === "cyberpunk";
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
   const [terminalHistory, setTerminalHistory] = useState([
     {
@@ -198,6 +204,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("zack_theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("zack_lang", lang);
+  }, [lang]);
 
   useEffect(() => {
     terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -219,6 +229,22 @@ export default function App() {
     ]);
   };
 
+  const toggleLanguage = (targetLang) => {
+    const nextLang = targetLang || (lang === "en" ? "id" : "en");
+    setLang(nextLang);
+    setTerminalHistory((prev) => [
+      ...prev,
+      {
+        type: "output",
+        content: `[SYS_LANG CHANGED] Active Mode: ${
+          nextLang === "id"
+            ? "BAHASA INDONESIA (id) // Teks antarmuka dialihkan ke Bahasa Indonesia"
+            : "ENGLISH (en) // Portfolio UI language switched to English"
+        }`,
+      },
+    ]);
+  };
+
   const handleCommand = (cmdText) => {
     const rawCmd = (cmdText || commandInput).trim().toLowerCase();
     if (!rawCmd) return;
@@ -232,6 +258,7 @@ export default function App() {
           content: `Available CLI Commands:
   • help       : Display command matrix
   • theme      : Toggle between Cyberpunk Neon Pink and Tokyo Slate
+  • lang       : Switch language between English and Indonesian (en / id)
   • about      : Summary of background & core focus
   • skills     : Overview of stack capabilities
   • projects   : List highlighted repository links
@@ -243,17 +270,31 @@ export default function App() {
         break;
       case "theme":
         {
-          const newTheme = theme === "cyberpunk" ? "tokyo" : "cyberpunk";
-          setTheme(newTheme);
+          const nextTheme = theme === "cyberpunk" ? "tokyo" : "cyberpunk";
+          setTheme(nextTheme);
           newHistory.push({
             type: "output",
             content: `Switched palette to: ${
-              newTheme === "cyberpunk"
+              nextTheme === "cyberpunk"
                 ? "CYBERPUNK NEON PINK (#ff00e5 / #00f0ff / #0a0a12)"
                 : "TOKYO NIGHT SLATE (#00f0ff / #10b981 / #020617)"
             }`,
           });
         }
+        break;
+      case "lang":
+      case "language":
+      case "bahasa":
+        {
+          const nextLang = lang === "en" ? "id" : "en";
+          toggleLanguage(nextLang);
+        }
+        break;
+      case "lang en":
+        toggleLanguage("en");
+        break;
+      case "lang id":
+        toggleLanguage("id");
         break;
       case "palette":
         newHistory.push({
@@ -400,7 +441,7 @@ export default function App() {
                 isCyber ? "hover:text-[#ff00e5]" : "hover:text-cyan-400"
               }`}
             >
-              /about
+              {t.nav.about}
             </a>
             <a
               href="#skills"
@@ -408,7 +449,7 @@ export default function App() {
                 isCyber ? "hover:text-[#00f0ff]" : "hover:text-cyan-400"
               }`}
             >
-              /skills
+              {t.nav.skills}
             </a>
             <a
               href="#projects"
@@ -416,7 +457,7 @@ export default function App() {
                 isCyber ? "hover:text-[#ff00e5]" : "hover:text-cyan-400"
               }`}
             >
-              /projects
+              {t.nav.projects}
             </a>
             <a
               href="#github-stats"
@@ -424,7 +465,7 @@ export default function App() {
                 isCyber ? "hover:text-[#fcee0a]" : "hover:text-cyan-400"
               }`}
             >
-              /stats
+              {t.nav.stats}
             </a>
             <a
               href="#contact"
@@ -432,11 +473,18 @@ export default function App() {
                 isCyber ? "hover:text-[#39ff14]" : "hover:text-cyan-400"
               }`}
             >
-              /contact
+              {t.nav.contact}
             </a>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* CYBERPUNK LANGUAGE TOGGLE */}
+            <LanguageToggle
+              lang={lang}
+              onToggleLanguage={toggleLanguage}
+              isCyber={isCyber}
+            />
+
             {/* THEME TOGGLE BUTTON */}
             <button
               onClick={toggleTheme}
@@ -449,7 +497,7 @@ export default function App() {
             >
               <Palette className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">
-                {isCyber ? "NEON PINK" : "CYBERPUNK"}
+                {isCyber ? t.nav.themeNeonPink : t.nav.themeCyber}
               </span>
               <span
                 className={`w-2 h-2 rounded-full transition-colors ${
@@ -481,7 +529,7 @@ export default function App() {
                   : "bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-cyan-500/20"
               }`}
             >
-              <span>CONNECT</span>
+              <span>{t.nav.connect}</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -505,12 +553,12 @@ export default function App() {
                   isCyber ? "bg-[#39ff14]" : "bg-emerald-400"
                 }`}
               ></span>
-              Available for Full-Stack & Quant Projects
+              {t.hero.statusBadge}
             </div>
 
             <div className="space-y-2">
               <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                👋 Hi, I'm{" "}
+                {t.hero.greeting}{" "}
                 <span
                   className={`text-transparent bg-clip-text ${
                     isCyber
@@ -526,7 +574,7 @@ export default function App() {
                   isCyber ? "text-[#00f0ff]" : "text-cyan-400"
                 }`}
               >
-                Full-Stack Developer & Quant Trading Researcher
+                {t.hero.role}
               </p>
             </div>
 
@@ -535,9 +583,7 @@ export default function App() {
                 isCyber ? "text-[#f0f0f5]/80" : "text-slate-400"
               }`}
             >
-              Building high-performance web applications, specialized POS
-              solutions, offline-first architectures, and quantitative trading
-              model algorithms.
+              {t.hero.bio}
             </p>
 
             <blockquote
@@ -547,8 +593,7 @@ export default function App() {
                   : "border-cyan-400 bg-slate-900/60 text-slate-300"
               }`}
             >
-              "Data without analysis is just noise. Efficient code is the bridge
-              to clarity."
+              {t.hero.quote}
             </blockquote>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -567,7 +612,7 @@ export default function App() {
                     isCyber ? "text-[#ff00e5]" : "text-cyan-400"
                   }`}
                 />
-                <span>GitHub Profile</span>
+                <span>{t.hero.githubProfile}</span>
               </a>
 
               <button
@@ -583,7 +628,7 @@ export default function App() {
                     isCyber ? "text-[#00f0ff]" : "text-emerald-400"
                   }`}
                 />
-                <span>Contact Me</span>
+                <span>{t.hero.contactMe}</span>
               </button>
 
               <button
@@ -603,7 +648,7 @@ export default function App() {
                 ) : (
                   <Copy className="w-4 h-4" />
                 )}
-                <span>{copiedLink ? "Copied" : "Copy Mail"}</span>
+                <span>{copiedLink ? t.hero.copied : t.hero.copyMail}</span>
               </button>
             </div>
           </div>
@@ -716,11 +761,12 @@ export default function App() {
                     isCyber ? "text-[#787899]" : "text-slate-500"
                   }`}
                 >
-                  Prompts:
+                  {t.terminal.promptsTitle}
                 </span>
                 {[
                   "help",
                   "theme",
+                  "lang",
                   "about",
                   "skills",
                   "projects",
@@ -759,7 +805,7 @@ export default function App() {
                   type="text"
                   value={commandInput}
                   onChange={(e) => setCommandInput(e.target.value)}
-                  placeholder="Type CLI command or 'theme'..."
+                  placeholder={t.terminal.inputPlaceholder}
                   className={`flex-1 bg-transparent font-mono text-xs focus:outline-none transition-colors ${
                     isCyber
                       ? "text-[#f0f0f5] placeholder-[#787899]"
@@ -782,7 +828,7 @@ export default function App() {
         </div>
 
         {/* INFINITE SCROLLING TECH STACK MARQUEE */}
-        <TechMarquee isCyber={isCyber} />
+        <TechMarquee isCyber={isCyber} lang={lang} />
       </section>
 
         {/* ENGINEERING PRINCIPLES */}
@@ -793,10 +839,10 @@ export default function App() {
                 isCyber ? "text-[#ff00e5]" : "text-cyan-400"
               }`}
             >
-              // ARCHITECTURE & FOCUS
+              {t.principles.tag}
             </h2>
             <h3 className="text-2xl font-bold flex items-center gap-2">
-              Engineering Principles{" "}
+              {t.principles.title}{" "}
               <Cpu
                 className={`w-5 h-5 ${
                   isCyber ? "text-[#00f0ff]" : "text-emerald-400"
@@ -822,14 +868,13 @@ export default function App() {
               >
                 <Code2 className="w-5 h-5" />
               </div>
-              <h4 className="font-semibold text-base">Full-Stack Web Apps</h4>
+              <h4 className="font-semibold text-base">{t.principles.items[0].title}</h4>
               <p
                 className={`text-xs leading-relaxed ${
                   isCyber ? "text-[#f0f0f5]/70" : "text-slate-400"
                 }`}
               >
-                Modern responsive client and server architectures built with
-                Next.js, React, Svelte, Laravel, and Tailwind CSS.
+                {t.principles.items[0].desc}
               </p>
             </div>
 
@@ -850,15 +895,14 @@ export default function App() {
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <h4 className="font-semibold text-base">
-                Offline-First Architecture
+                {t.principles.items[1].title}
               </h4>
               <p
                 className={`text-xs leading-relaxed ${
                   isCyber ? "text-[#f0f0f5]/70" : "text-slate-400"
                 }`}
               >
-                Prioritizing local data storage, client-side execution, zero-lag
-                POS operations, and data privacy without external DB dependency.
+                {t.principles.items[1].desc}
               </p>
             </div>
 
@@ -878,15 +922,13 @@ export default function App() {
               >
                 <Activity className="w-5 h-5" />
               </div>
-              <h4 className="font-semibold text-base">Quant Research & ML</h4>
+              <h4 className="font-semibold text-base">{t.principles.items[2].title}</h4>
               <p
                 className={`text-xs leading-relaxed ${
                   isCyber ? "text-[#f0f0f5]/70" : "text-slate-400"
                 }`}
               >
-                Designing algorithmic trading strategies using Python (GRU/LSTM
-                neural networks, ATR volatility bands, & trade slippage
-                simulations).
+                {t.principles.items[2].desc}
               </p>
             </div>
 
@@ -906,15 +948,13 @@ export default function App() {
               >
                 <Terminal className="w-5 h-5" />
               </div>
-              <h4 className="font-semibold text-base">Terminal-Centric DevOps</h4>
+              <h4 className="font-semibold text-base">{t.principles.items[3].title}</h4>
               <p
                 className={`text-xs leading-relaxed ${
                   isCyber ? "text-[#f0f0f5]/70" : "text-slate-400"
                 }`}
               >
-                Operating smoothly across Linux environments, Git pipelines,
-                Docker containers, Tailscale mesh networks, and VirtualBox
-                nodes.
+                {t.principles.items[3].desc}
               </p>
             </div>
           </div>
@@ -929,10 +969,10 @@ export default function App() {
                   isCyber ? "text-[#00f0ff]" : "text-cyan-400"
                 }`}
               >
-                // STACK CAPABILITIES
+                {t.skills.tag}
               </h2>
               <h3 className="text-2xl font-bold flex items-center gap-2">
-                Tech Stack Matrix{" "}
+                {t.skills.title}{" "}
                 <Layers
                   className={`w-5 h-5 ${
                     isCyber ? "text-[#ff00e5]" : "text-purple-400"
@@ -943,10 +983,10 @@ export default function App() {
 
             <div className="flex flex-wrap gap-2 font-mono text-xs">
               {[
-                { id: "all", label: "All Stack" },
-                { id: "languages", label: "Languages" },
-                { id: "frameworks", label: "Frameworks" },
-                { id: "infrastructure", label: "Infra & DB" },
+                { id: "all", label: t.skills.categories.all },
+                { id: "languages", label: t.skills.categories.languages },
+                { id: "frameworks", label: t.skills.categories.frameworks },
+                { id: "infrastructure", label: t.skills.categories.infrastructure },
               ].map((cat) => (
                 <button
                   key={cat.id}
@@ -997,68 +1037,10 @@ export default function App() {
         </section>
 
         {/* FULL-STACK & QUANT TRADING PROJECT GALLERY */}
-        <ProjectGallery isCyber={isCyber} projects={PROJECTS} />
+        <ProjectGallery isCyber={isCyber} projects={PROJECTS} lang={lang} />
 
-        {/* GITHUB REPOSITORY METRICS */}
-        <section id="github-stats" className="space-y-6">
-          <div className="space-y-1">
-            <h2
-              className={`text-xs font-mono uppercase tracking-widest ${
-                isCyber ? "text-[#39ff14]" : "text-cyan-400"
-              }`}
-            >
-              // REPOSITORY METRICS
-            </h2>
-            <h3 className="text-2xl font-bold flex items-center gap-2">
-              GitHub Insights{" "}
-              <GitBranch
-                className={`w-5 h-5 ${
-                  isCyber ? "text-[#00f0ff]" : "text-cyan-400"
-                }`}
-              />
-            </h3>
-          </div>
-
-          <div
-            className={`p-6 rounded-2xl border space-y-6 transition-all ${
-              isCyber
-                ? "bg-[#121226]/90 border-[#ff00e5]/30 shadow-[0_0_20px_rgba(255,0,229,0.15)]"
-                : "bg-slate-900/60 border-slate-800"
-            }`}
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-              <div className="flex justify-center">
-                <img
-                  src="https://github-readme-stats.vercel.app/api?username=zakiafuadi925-ops&show_icons=true&theme=tokyonight&hide_border=true&count_private=true"
-                  alt="Zack's GitHub Stats"
-                  className={`w-full max-w-md rounded-xl border shadow-lg ${
-                    isCyber ? "border-[#ff00e5]/30" : "border-slate-800"
-                  }`}
-                />
-              </div>
-
-              <div className="flex justify-center">
-                <img
-                  src="https://github-readme-stats.vercel.app/api/top-langs/?username=zakiafuadi925-ops&layout=compact&theme=tokyonight&hide_border=true&hide=html,css"
-                  alt="Top Languages"
-                  className={`w-full max-w-md rounded-xl border shadow-lg ${
-                    isCyber ? "border-[#00f0ff]/30" : "border-slate-800"
-                  }`}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-center pt-2">
-              <img
-                src="https://github-readme-streak-stats.herokuapp.com/?user=zakiafuadi925-ops&theme=tokyonight&hide_border=true"
-                alt="GitHub Streak"
-                className={`w-full max-w-xl rounded-xl border shadow-lg ${
-                  isCyber ? "border-[#39ff14]/30" : "border-slate-800"
-                }`}
-              />
-            </div>
-          </div>
-        </section>
+        {/* GITHUB REPOSITORY METRICS & TOP REPOS */}
+        <GithubStatsSection isCyber={isCyber} lang={lang} />
 
         {/* DEPLOYMENT & SHELL SPEC */}
         <section
@@ -1073,16 +1055,14 @@ export default function App() {
               isCyber ? "text-[#00f0ff]" : "text-cyan-400"
             }`}
           >
-            <Terminal className="w-4 h-4" /> Deploying to GitHub Pages (Static
-            Hosting)
+            <Terminal className="w-4 h-4" /> {t.deployment.title}
           </div>
           <p
             className={`text-xs leading-relaxed font-mono ${
               isCyber ? "text-[#f0f0f5]/70" : "text-slate-400"
             }`}
           >
-            This portfolio app is optimized as a Single Page Application (SPA)
-            with dual-theme architecture. Build and deploy effortlessly:
+            {t.deployment.desc}
           </p>
           <pre
             className={`p-3 rounded-lg font-mono text-xs overflow-x-auto border ${
@@ -1106,15 +1086,14 @@ npx gh-pages -d dist`}
         >
           <div className="text-center space-y-3 max-w-xl mx-auto">
             <h3 className="text-3xl font-bold">
-              Let's Connect & Collaborate
+              {t.contact.title}
             </h3>
             <p
               className={`text-sm ${
                 isCyber ? "text-[#f0f0f5]/70" : "text-slate-400"
               }`}
             >
-              Open for full-stack web applications, point-of-sale engineering,
-              or algorithmic trading research opportunities.
+              {t.contact.subtitle}
             </p>
           </div>
 
@@ -1129,7 +1108,7 @@ npx gh-pages -d dist`}
               }`}
             >
               <Mail className="w-4 h-4" />
-              <span>TRANSMIT DIRECT MESSAGE (CONTACT FORM)</span>
+              <span>{t.contact.transmitBtn}</span>
             </button>
           </div>
 
@@ -1210,8 +1189,7 @@ npx gh-pages -d dist`}
               isCyber ? "text-[#787899]" : "text-slate-500"
             }`}
           >
-            © {new Date().getFullYear()} Ahmad Zakkia Fu'adi (Zack). Powered by
-            Cyberpunk Neon Pink & Tokyo Night Palettes.
+            © {new Date().getFullYear()} Ahmad Zakkia Fu'adi (Zack). {t.contact.copyright}
           </div>
         </section>
       </main>
@@ -1221,6 +1199,7 @@ npx gh-pages -d dist`}
         isOpen={isContactOpen}
         onClose={() => setIsContactOpen(false)}
         isCyber={isCyber}
+        lang={lang}
       />
     </div>
   );

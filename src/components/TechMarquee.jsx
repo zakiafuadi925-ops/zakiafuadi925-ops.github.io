@@ -163,7 +163,12 @@ const MARQUEE_TECH = [
   },
 ];
 
-export default function TechMarquee({ isCyber = true, items = MARQUEE_TECH }) {
+export default function TechMarquee({
+  isCyber = true,
+  items = MARQUEE_TECH,
+  lang = "en",
+}) {
+  const isId = lang === "id";
   // Duplicate array for infinite seamless looping
   const marqueeItems = [...items, ...items];
 
@@ -182,7 +187,9 @@ export default function TechMarquee({ isCyber = true, items = MARQUEE_TECH }) {
               isCyber ? "text-[#00f0ff]" : "text-cyan-400"
             }`}
           >
-            // SYSTEM TELEMETRY : ACTIVE TECH MATRIX
+            // {isId
+              ? "TELEMETRI SISTEM : MATRIKS TEKNOLOGI AKTIF"
+              : "SYSTEM TELEMETRY : ACTIVE TECH MATRIX"}
           </span>
         </div>
 
@@ -192,7 +199,9 @@ export default function TechMarquee({ isCyber = true, items = MARQUEE_TECH }) {
           }`}
         >
           <Sparkles className="w-3 h-3 text-[#fcee0a]" />
-          <span>[HOVER TO PAUSE & INSPECT]</span>
+          <span>
+            [{isId ? "ARAHKAN KURSOR UNTUK JEDA" : "HOVER TO PAUSE & INSPECT"}]
+          </span>
         </div>
       </div>
 

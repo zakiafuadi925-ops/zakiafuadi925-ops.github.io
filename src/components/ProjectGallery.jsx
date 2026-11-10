@@ -37,18 +37,20 @@ const GithubIcon = ({ className = "w-4 h-4" }) => (
 export default function ProjectGallery({
   isCyber = true,
   projects = DEFAULT_PROJECTS,
+  lang = "en",
 }) {
+  const isId = lang === "id";
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState("grid"); // "grid" | "detailed"
   const [selectedProject, setSelectedProject] = useState(null);
 
   const categories = [
-    { id: "all", label: "All Repositories", icon: LayoutGrid },
-    { id: "quant", label: "Quant & Trading", icon: TrendingUp },
-    { id: "fullstack", label: "Full-Stack Web", icon: Code2 },
-    { id: "pos", label: "POS & Offline", icon: Terminal },
-    { id: "utilities", label: "Utilities & Privacy", icon: Activity },
+    { id: "all", label: isId ? "Semua Repositori" : "All Repositories", icon: LayoutGrid },
+    { id: "quant", label: isId ? "Kuantitatif & Trading" : "Quant & Trading", icon: TrendingUp },
+    { id: "fullstack", label: isId ? "Web Full-Stack" : "Full-Stack Web", icon: Code2 },
+    { id: "pos", label: isId ? "POS & Offline" : "POS & Offline", icon: Terminal },
+    { id: "utilities", label: isId ? "Utilitas & Privasi" : "Utilities & Privacy", icon: Activity },
   ];
 
   const filteredProjects = useMemo(() => {
@@ -85,7 +87,7 @@ export default function ProjectGallery({
                 isCyber ? "text-[#ff00e5]" : "text-cyan-400"
               }`}
             >
-              // PROJECT MATRIX & RESEARCH REPOSITORIES
+              // {isId ? "MATRIKS PROYEK & RISET REPOSITORI" : "PROJECT MATRIX & RESEARCH REPOSITORIES"}
             </span>
             <span
               className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
@@ -94,12 +96,12 @@ export default function ProjectGallery({
                   : "bg-cyan-500/10 text-cyan-300 border-cyan-500/30"
               }`}
             >
-              LIVE DEPLOYMENTS & ALGORITHMS
+              {isId ? "PROYEK TERDEPLOY & ALGORITMA" : "LIVE DEPLOYMENTS & ALGORITHMS"}
             </span>
           </div>
 
           <h3 className="text-3xl font-extrabold tracking-tight flex items-center gap-2.5">
-            Full-Stack & Quant Gallery{" "}
+            {isId ? "Galeri Full-Stack & Quant" : "Full-Stack & Quant Gallery"}{" "}
             <Zap
               className={`w-6 h-6 ${
                 isCyber ? "text-[#fcee0a]" : "text-yellow-400"
@@ -112,8 +114,9 @@ export default function ProjectGallery({
               isCyber ? "text-[#787899]" : "text-slate-400"
             }`}
           >
-            Curated selection of production web applications, offline-first F&B
-            architectures, and quantitative trading algorithms.
+            {isId
+              ? "Kurasi aplikasi web produksi, arsitektur kasir offline-first, dan model trading kuantitatif."
+              : "Curated selection of production web applications, offline-first F&B architectures, and quantitative trading algorithms."}
           </p>
         </div>
 
@@ -129,7 +132,7 @@ export default function ProjectGallery({
             <BarChart3 className="w-3.5 h-3.5" />
             <span>
               <strong className="text-white font-bold">{totalCount}</strong>{" "}
-              Projects
+              {isId ? "Proyek" : "Projects"}
             </span>
           </div>
 
@@ -143,7 +146,7 @@ export default function ProjectGallery({
             <TrendingUp className="w-3.5 h-3.5" />
             <span>
               <strong className="text-white font-bold">{quantCount}</strong>{" "}
-              Quant Algo
+              {isId ? "Model Quant" : "Quant Algo"}
             </span>
           </div>
 
@@ -156,7 +159,7 @@ export default function ProjectGallery({
           >
             <span className="w-2 h-2 rounded-full bg-[#39ff14] animate-pulse"></span>
             <span>
-              <strong className="text-white font-bold">{liveCount}</strong> Live
+              <strong className="text-white font-bold">{liveCount}</strong> {isId ? "Aktif" : "Live"}
             </span>
           </div>
         </div>
@@ -215,7 +218,9 @@ export default function ProjectGallery({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search stack, title, tag..."
+                placeholder={
+                  isId ? "Cari stack, judul, teknologi..." : "Search stack, title, tag..."
+                }
                 className={`w-full bg-transparent focus:outline-none font-mono ${
                   isCyber
                     ? "text-[#f0f0f5] placeholder-[#787899]"

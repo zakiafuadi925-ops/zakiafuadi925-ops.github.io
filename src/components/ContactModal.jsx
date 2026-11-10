@@ -10,7 +10,14 @@ import {
   MessageSquare,
 } from "lucide-react";
 
-export default function ContactModal({ isOpen, onClose, isCyber = true }) {
+export default function ContactModal({
+  isOpen,
+  onClose,
+  isCyber = true,
+  lang = "en",
+}) {
+  const isId = lang === "id";
+
   const [formData, setFormData] = useState({
     email: "",
     subject: "",
@@ -20,12 +27,19 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
   const [status, setStatus] = useState("idle"); // "idle" | "transmitting" | "success" | "error"
   const [errorMessage, setErrorMessage] = useState("");
 
-  const presetSubjects = [
-    "Full-Stack Web Project",
-    "Quant / Trading Research",
-    "POS / Offline Architecture",
-    "General Collaboration",
-  ];
+  const presetSubjects = isId
+    ? [
+        "Proyek Web Full-Stack",
+        "Riset Kuantitatif / Trading",
+        "Arsitektur POS / Offline",
+        "Kolaborasi Umum",
+      ]
+    : [
+        "Full-Stack Web Project",
+        "Quant / Trading Research",
+        "POS / Offline Architecture",
+        "General Collaboration",
+      ];
 
   // Close on Escape key
   useEffect(() => {
@@ -47,19 +61,31 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
     // Basic validation
     if (!formData.email.trim() || !formData.email.includes("@")) {
       setStatus("error");
-      setErrorMessage("ERR: Please enter a valid sender email address.");
+      setErrorMessage(
+        isId
+          ? "ERR: Silakan masukkan alamat email yang valid."
+          : "ERR: Please enter a valid sender email address."
+      );
       return;
     }
 
     if (!formData.subject.trim()) {
       setStatus("error");
-      setErrorMessage("ERR: Communication subject line cannot be empty.");
+      setErrorMessage(
+        isId
+          ? "ERR: Baris subjek komunikasi tidak boleh kosong."
+          : "ERR: Communication subject line cannot be empty."
+      );
       return;
     }
 
     if (!formData.message.trim() || formData.message.trim().length < 10) {
       setStatus("error");
-      setErrorMessage("ERR: Payload message must be at least 10 characters.");
+      setErrorMessage(
+        isId
+          ? "ERR: Pesan payload minimal harus 10 karakter."
+          : "ERR: Payload message must be at least 10 characters."
+      );
       return;
     }
 
@@ -148,21 +174,27 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
 
               <div className="space-y-1">
                 <span className="text-[10px] uppercase tracking-widest text-[#39ff14] font-bold">
-                  // TRANSMISSION CONFIRMED
+                  // {isId ? "TRANSMISI DIKONFIRMASI" : "TRANSMISSION CONFIRMED"}
                 </span>
                 <h4 className="text-xl font-bold text-white">
-                  Payload Dispatched Successfully
+                  {isId
+                    ? "Pesan Muatan Berhasil Dikirim"
+                    : "Payload Dispatched Successfully"}
                 </h4>
                 <p
                   className={`text-xs leading-relaxed max-w-sm mx-auto ${
                     isCyber ? "text-[#f0f0f5]/80" : "text-slate-400"
                   }`}
                 >
-                  Your message has been encrypted and routed to{" "}
+                  {isId
+                    ? "Pesan Anda telah dienkripsi dan diarahkan ke "
+                    : "Your message has been encrypted and routed to "}
                   <strong className="text-[#00f0ff]">
                     zakiafuadi925@gmail.com
                   </strong>
-                  . Zack will review your transmission and respond promptly.
+                  {isId
+                    ? ". Zack akan membaca transmisi ini dan segera membalas."
+                    : ". Zack will review your transmission and respond promptly."}
                 </p>
               </div>
 
@@ -175,7 +207,7 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                       : "bg-slate-900 border-slate-700 text-slate-300"
                   }`}
                 >
-                  Send Another Transmission
+                  {isId ? "Kirim Pesan Lainnya" : "Send Another Transmission"}
                 </button>
                 <button
                   onClick={onClose}
@@ -185,7 +217,7 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                       : "bg-cyan-500 text-slate-950 hover:bg-cyan-400"
                   }`}
                 >
-                  Close Shell
+                  {isId ? "Tutup Shell" : "Close Shell"}
                 </button>
               </div>
             </div>
@@ -197,7 +229,7 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                   <span
                     className={isCyber ? "text-[#787899]" : "text-slate-400"}
                   >
-                    STATUS: <strong className="text-[#39ff14]">ONLINE</strong>
+                    STATUS: <strong className="text-[#39ff14]">{isId ? "AKTIF" : "ONLINE"}</strong>
                   </span>
                   <span
                     className={isCyber ? "text-[#ff00e5]" : "text-cyan-400"}
@@ -206,7 +238,7 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                   </span>
                 </div>
                 <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                  Direct Neural Comms{" "}
+                  {isId ? "Komunikasi Langsung" : "Direct Neural Comms"}{" "}
                   <Sparkles
                     className={`w-4 h-4 ${
                       isCyber ? "text-[#fcee0a]" : "text-amber-400"
@@ -232,7 +264,7 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                         isCyber ? "text-[#00f0ff]" : "text-cyan-400"
                       }`}
                     />
-                    Your Email Address *
+                    {isId ? "Email Pengirim *" : "Your Email Address *"}
                   </span>
                   <span className="text-[10px] text-[#787899]">
                     [REPLY ROUTE]
@@ -252,7 +284,7 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
-                    placeholder="architect@domain.com"
+                    placeholder="nama@domain.com"
                     className="w-full bg-transparent text-white font-mono text-xs focus:outline-none placeholder-slate-600"
                   />
                 </div>
@@ -261,7 +293,7 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
               {/* SUBJECT FIELD & PRESET CHIPS */}
               <div className="space-y-1.5 font-mono text-xs">
                 <label className="flex items-center justify-between text-slate-300 font-semibold">
-                  <span>Subject Line *</span>
+                  <span>{isId ? "Subjek Pesan *" : "Subject Line *"}</span>
                   <span className="text-[10px] text-[#787899]">
                     [TOPIC MATRIX]
                   </span>
@@ -280,7 +312,9 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                     onChange={(e) =>
                       setFormData({ ...formData, subject: e.target.value })
                     }
-                    placeholder="Project / Strategy Scope"
+                    placeholder={
+                      isId ? "Lingkup Proyek / Riset Algoritma" : "Project / Strategy Scope"
+                    }
                     className="w-full bg-transparent text-white font-mono text-xs focus:outline-none placeholder-slate-600"
                   />
                 </div>
@@ -317,10 +351,12 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                         isCyber ? "text-[#39ff14]" : "text-emerald-400"
                       }`}
                     />
-                    Encrypted Payload (Message) *
+                    {isId
+                      ? "Isi Pesan Terenkripsi *"
+                      : "Encrypted Payload (Message) *"}
                   </span>
                   <span className="text-[10px] text-[#787899]">
-                    [{formData.message.length} chars]
+                    [{formData.message.length} {isId ? "karakter" : "chars"}]
                   </span>
                 </label>
                 <div
@@ -337,7 +373,11 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                     onChange={(e) =>
                       setFormData({ ...formData, message: e.target.value })
                     }
-                    placeholder="Describe your project, quant parameters, or collaboration proposal..."
+                    placeholder={
+                      isId
+                        ? "Jelaskan proyek, parameter trading quant, atau tawaran kolaborasi Anda..."
+                        : "Describe your project, quant parameters, or collaboration proposal..."
+                    }
                     className="w-full bg-transparent text-white font-mono text-xs focus:outline-none placeholder-slate-600 resize-none"
                   />
                 </div>
@@ -356,19 +396,27 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                 {status === "transmitting" ? (
                   <>
                     <span className="w-3.5 h-3.5 border-2 border-[#05050a] border-t-transparent rounded-full animate-spin"></span>
-                    <span>ENCRYPTING & TRANSMITTING PACKET...</span>
+                    <span>
+                      {isId
+                        ? "MENGENKRIPSI & MENGIRIM PAKET..."
+                        : "ENCRYPTING & TRANSMITTING PACKET..."}
+                    </span>
                   </>
                 ) : (
                   <>
                     <Send className="w-4 h-4" />
-                    <span>TRANSMIT PACKET // SEND MESSAGE</span>
+                    <span>
+                      {isId
+                        ? "TRANSMISI PAKET // KIRIM PESAN"
+                        : "TRANSMIT PACKET // SEND MESSAGE"}
+                    </span>
                   </>
                 )}
               </button>
 
               {/* FOOTER DIRECT EMAIL LINK */}
               <div className="pt-1 text-center font-mono text-[11px] text-[#787899]">
-                Or email directly via{" "}
+                {isId ? "Atau kirim langsung via " : "Or email directly via "}
                 <a
                   href={`mailto:zakiafuadi925@gmail.com?subject=${encodeURIComponent(
                     formData.subject || "Collaboration Inquiry"
@@ -377,7 +425,7 @@ export default function ContactModal({ isOpen, onClose, isCyber = true }) {
                     isCyber ? "text-[#00f0ff] hover:text-[#ff00e5]" : "text-cyan-400 hover:text-white"
                   }`}
                 >
-                  Native Email Client
+                  {isId ? "Aplikasi Email" : "Native Email Client"}
                 </a>
               </div>
             </form>
