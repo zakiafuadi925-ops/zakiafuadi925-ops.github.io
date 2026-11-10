@@ -9,15 +9,13 @@ import {
   ChevronRight,
   Layers,
   ShieldCheck,
-  Zap,
   Activity,
-  Sparkles,
-  CheckCircle2,
   Copy,
   Check,
-  ArrowUpRight,
   Palette,
 } from "lucide-react";
+import { PROJECTS } from "./data/projects";
+import ProjectGallery from "./components/ProjectGallery";
 
 // --- CUSTOM SVG BRAND ICONS ---
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -171,133 +169,10 @@ const TECH_STACK = [
   },
 ];
 
-const PROJECTS = [
-  {
-    id: "oh-my-cashier",
-    title: "Oh My Cashier!",
-    category: "pos",
-    tags: ["Offline-First", "PWA", "Capacitor", "Oh My Zsh Theme"],
-    description:
-      "Terminal-shell themed F&B Point of Sale PWA with table management, split bills, receipt printer integration, and Android Capacitor deployment capability.",
-    featured: true,
-    highlights: [
-      "Zero-lag offline execution",
-      "Capacitor Android Pipeline",
-      "Custom POS Shell Interface",
-    ],
-    github: "https://github.com/zakiafuadi925-ops",
-    live: "https://oh-my-cashier.vercel.app/",
-    architecture: "Offline-First Local Storage Shell App",
-  },
-  {
-    id: "siklusku",
-    title: "Siklusku",
-    category: "utilities",
-    tags: ["Privacy-First", "Vanilla JS", "Tailwind CSS", "100% Client-Side"],
-    description:
-      "Ultra privacy-focused menstrual cycle & health tracker built with 100% client-side data persistence. No cloud telemetry, no database leaks.",
-    featured: true,
-    highlights: [
-      "Zero External Database",
-      "Complete Data Privacy",
-      "Lightweight Vanilla JS",
-    ],
-    github: "https://github.com/zakiafuadi925-ops/siklusku",
-    live: null,
-    architecture: "100% Client-Side Local Storage",
-  },
-  {
-    id: "crypto-quant",
-    title: "Crypto Quant Research Engine",
-    category: "quant",
-    tags: ["Python", "LSTM / GRU", "ATR Thresholds", "Slippage Sim"],
-    description:
-      "Quantitative trading strategy backtesting engine for BTC models. Features GRU/LSTM neural prediction, dynamic volatility band ATR thresholds, and trade slippage modelling.",
-    featured: true,
-    highlights: [
-      "Neural Net Signal Predictor",
-      "Dynamic Volatility ATR",
-      "Real-world Slippage Sim",
-    ],
-    github: "https://github.com/zakiafuadi925-ops",
-    live: null,
-    architecture: "Python Algorithmic Pipeline",
-  },
-  {
-    id: "personal-finance",
-    title: "Personal Finance Tracker",
-    category: "web-apps",
-    tags: ["Next.js", "Supabase", "PostgreSQL", "Recharts"],
-    description:
-      "Full-stack personal asset & expenditure analysis web application featuring transaction logging, dynamic budget analytics, and SVG charts visualizer.",
-    featured: false,
-    highlights: [
-      "Supabase Row-Level Security",
-      "Recharts Visual Analytics",
-      "Real-time Budget Sync",
-    ],
-    github: "https://github.com/zakiafuadi925-ops",
-    live: "https://personal-finance-tracker-rust-phi.vercel.app/auth",
-    architecture: "Next.js + Supabase Backend",
-  },
-  {
-    id: "wni-monopoly",
-    title: "WNI Monopoly Web",
-    category: "web-apps",
-    tags: ["Svelte", "Vite", "Tailwind CSS", "Web Game"],
-    description:
-      "Indonesian-themed Monopoly web application featuring interactive board movement, property purchasing logic, and custom event cards in Svelte.",
-    featured: false,
-    highlights: [
-      "Svelte Reactive State Management",
-      "Indonesian Property Lore",
-      "Responsive Board UI",
-    ],
-    github: "https://github.com/zakiafuadi925-ops",
-    live: "https://monopoliwni-gas.vercel.app/",
-    architecture: "Svelte SPA State Engine",
-  },
-  {
-    id: "math-boxing",
-    title: "Math Boxing WEB",
-    category: "web-apps",
-    tags: ["React", "Express", "Supabase", "Real-time Game"],
-    description:
-      "Interactive real-time mathematical boxing game & logic challenge platform. Test your arithmetic calculation speed under intense round timers.",
-    featured: false,
-    highlights: [
-      "Fast-paced Logic Engine",
-      "Global Highscores",
-      "React Sound & Combo Effects",
-    ],
-    github: "https://github.com/zakiafuadi925-ops",
-    live: "https://math-boxing-web.vercel.app/",
-    architecture: "React Client + Express/Supabase",
-  },
-  {
-    id: "nama-living",
-    title: "Nama Living",
-    category: "web-apps",
-    tags: ["React", "Vite", "Tailwind CSS", "Client Business"],
-    description:
-      "Modern property listing & curated interior living space showcase platform built with sleek, minimalist aesthetic for luxury living catalog.",
-    featured: false,
-    highlights: [
-      "Client Showcase Design",
-      "High-performance Image Grid",
-      "Fluid Smooth Scrolling",
-    ],
-    github: "https://github.com/zakiafuadi925-ops",
-    live: "https://nama-living.vercel.app/",
-    architecture: "React Single Page App",
-  },
-];
-
 export default function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("zack_theme") || "cyberpunk";
   });
-  const [activeTab, setActiveTab] = useState("all");
   const [techCategory, setTechCategory] = useState("all");
   const [copiedLink, setCopiedLink] = useState(false);
 
@@ -433,11 +308,6 @@ export default function App() {
     setTerminalHistory(newHistory);
     setCommandInput("");
   };
-
-  const filteredProjects = PROJECTS.filter((p) => {
-    if (activeTab === "all") return true;
-    return p.category === activeTab;
-  });
 
   const filteredTech = TECH_STACK.filter((t) => {
     if (techCategory === "all") return true;
@@ -1120,189 +990,8 @@ export default function App() {
           </div>
         </section>
 
-        {/* HIGHLIGHTED PROJECTS */}
-        <section id="projects" className="space-y-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="space-y-1">
-              <h2
-                className={`text-xs font-mono uppercase tracking-widest ${
-                  isCyber ? "text-[#ff00e5]" : "text-cyan-400"
-                }`}
-              >
-                // SOFTWARE REPOSITORIES
-              </h2>
-              <h3 className="text-2xl font-bold flex items-center gap-2">
-                Highlighted Projects{" "}
-                <Zap
-                  className={`w-5 h-5 ${
-                    isCyber ? "text-[#fcee0a]" : "text-yellow-400"
-                  }`}
-                />
-              </h3>
-            </div>
-
-            <div className="flex flex-wrap gap-2 font-mono text-xs">
-              {[
-                { id: "all", label: "All Projects" },
-                { id: "pos", label: "POS Solutions" },
-                { id: "web-apps", label: "Web Applications" },
-                { id: "utilities", label: "Utilities" },
-                { id: "quant", label: "Quant Engine" },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-3 py-1.5 rounded-lg border transition-all ${
-                    activeTab === tab.id
-                      ? isCyber
-                        ? "bg-[#00f0ff]/20 border-[#00f0ff] text-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.3)]"
-                        : "bg-emerald-500/20 border-emerald-500 text-emerald-300"
-                      : isCyber
-                      ? "bg-[#121226] border-[#787899]/30 text-[#787899] hover:border-[#00f0ff]/50 hover:text-[#f0f0f5]"
-                      : "bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((proj) => (
-              <div
-                key={proj.id}
-                className={`group rounded-2xl border transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-sm ${
-                  isCyber
-                    ? "bg-[#121226]/90 border-[#ff00e5]/30 hover:border-[#ff00e5] hover:shadow-[0_0_20px_rgba(255,0,229,0.25)]"
-                    : "bg-slate-900/70 border-slate-800 hover:border-cyan-500/40"
-                }`}
-              >
-                <div className="p-6 space-y-4">
-                  <div className="flex items-center justify-between gap-2">
-                    <span
-                      className={`text-[10px] font-mono px-2.5 py-1 rounded-full border ${
-                        isCyber
-                          ? "bg-[#0a0a12] text-[#00f0ff] border-[#00f0ff]/40"
-                          : "bg-slate-800 text-slate-300 border-slate-700"
-                      }`}
-                    >
-                      {proj.architecture}
-                    </span>
-                    {proj.featured && (
-                      <span
-                        className={`flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded border ${
-                          isCyber
-                            ? "text-[#fcee0a] bg-[#fcee0a]/10 border-[#fcee0a]/40"
-                            : "text-amber-400 bg-amber-400/10 border-amber-400/20"
-                        }`}
-                      >
-                        <Sparkles className="w-3 h-3" /> Featured
-                      </span>
-                    )}
-                  </div>
-
-                  <h4
-                    className={`text-xl font-bold transition-colors ${
-                      isCyber
-                        ? "text-[#f0f0f5] group-hover:text-[#ff00e5]"
-                        : "text-slate-100 group-hover:text-cyan-400"
-                    }`}
-                  >
-                    {proj.title}
-                  </h4>
-
-                  <p
-                    className={`text-xs leading-relaxed ${
-                      isCyber ? "text-[#f0f0f5]/75" : "text-slate-400"
-                    }`}
-                  >
-                    {proj.description}
-                  </p>
-
-                  <div className="space-y-1.5 pt-2">
-                    {proj.highlights.map((h, idx) => (
-                      <div
-                        key={idx}
-                        className={`flex items-center gap-2 text-[11px] font-mono ${
-                          isCyber ? "text-[#f0f0f5]" : "text-slate-300"
-                        }`}
-                      >
-                        <CheckCircle2
-                          className={`w-3.5 h-3.5 shrink-0 ${
-                            isCyber ? "text-[#39ff14]" : "text-emerald-400"
-                          }`}
-                        />
-                        <span>{h}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="flex flex-wrap gap-1.5 pt-3">
-                    {proj.tags.map((t) => (
-                      <span
-                        key={t}
-                        className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
-                          isCyber
-                            ? "bg-[#0a0a12] text-[#ff00e5] border-[#ff00e5]/30"
-                            : "bg-slate-950 text-cyan-300 border border-slate-800"
-                        }`}
-                      >
-                        #{t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div
-                  className={`px-6 py-4 border-t flex items-center justify-between transition-colors ${
-                    isCyber
-                      ? "bg-[#0a0a12]/70 border-[#ff00e5]/20"
-                      : "bg-slate-950/60 border-slate-800/80"
-                  }`}
-                >
-                  <a
-                    href={proj.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={`flex items-center gap-1.5 text-xs font-mono transition-colors ${
-                      isCyber
-                        ? "text-[#787899] hover:text-[#ff00e5]"
-                        : "text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    <GithubIcon className="w-4 h-4" />
-                    <span>Source</span>
-                  </a>
-
-                  {proj.live ? (
-                    <a
-                      href={proj.live}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={`flex items-center gap-1 text-xs font-mono font-semibold transition-colors ${
-                        isCyber
-                          ? "text-[#39ff14] hover:text-[#39ff14]/80 drop-shadow-[0_0_5px_#39ff14]"
-                          : "text-emerald-400 hover:text-emerald-300"
-                      }`}
-                    >
-                      <span>Live App</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </a>
-                  ) : (
-                    <span
-                      className={`text-[10px] font-mono italic ${
-                        isCyber ? "text-[#787899]" : "text-slate-500"
-                      }`}
-                    >
-                      Private / Local Engine
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* FULL-STACK & QUANT TRADING PROJECT GALLERY */}
+        <ProjectGallery isCyber={isCyber} projects={PROJECTS} />
 
         {/* GITHUB REPOSITORY METRICS */}
         <section id="github-stats" className="space-y-6">
