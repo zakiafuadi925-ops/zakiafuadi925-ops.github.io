@@ -17,6 +17,7 @@ import {
 import { PROJECTS } from "./data/projects";
 import ProjectGallery from "./components/ProjectGallery";
 import TechMarquee from "./components/TechMarquee";
+import ContactModal from "./components/ContactModal";
 
 // --- CUSTOM SVG BRAND ICONS ---
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -176,6 +177,7 @@ export default function App() {
   });
   const [techCategory, setTechCategory] = useState("all");
   const [copiedLink, setCopiedLink] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   const isCyber = theme === "cyberpunk";
 
@@ -288,8 +290,9 @@ export default function App() {
       case "contact":
         newHistory.push({
           type: "output",
-          content: `Direct Communication Links:\nGitHub   : https://github.com/zakiafuadi925-ops\nEmail    : zakiafuadi925@gmail.com\nWhatsApp : https://wa.me/628123456789\nLinkedIn : https://linkedin.com/in/zakiafuadi`,
+          content: `Direct Communication Links:\nGitHub   : https://github.com/zakiafuadi925-ops\nEmail    : zakiafuadi925@gmail.com\nWhatsApp : https://wa.me/628123456789\nLinkedIn : https://linkedin.com/in/zakiafuadi\n[Opened Cyberpunk Contact Shell]`,
         });
+        setIsContactOpen(true);
         break;
       case "date":
         newHistory.push({ type: "output", content: new Date().toISOString() });
@@ -470,8 +473,8 @@ export default function App() {
               <GithubIcon className="w-4 h-4" />
             </a>
 
-            <a
-              href="#contact"
+            <button
+              onClick={() => setIsContactOpen(true)}
               className={`hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all shadow-md ${
                 isCyber
                   ? "bg-[#ff00e5] text-[#05050a] hover:bg-[#ff00e5]/90 shadow-[0_0_15px_rgba(255,0,229,0.4)]"
@@ -480,7 +483,7 @@ export default function App() {
             >
               <span>CONNECT</span>
               <ChevronRight className="w-3.5 h-3.5" />
-            </a>
+            </button>
           </div>
         </div>
       </nav>
@@ -567,8 +570,8 @@ export default function App() {
                 <span>GitHub Profile</span>
               </a>
 
-              <a
-                href="mailto:zakiafuadi925@gmail.com"
+              <button
+                onClick={() => setIsContactOpen(true)}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all font-mono text-xs ${
                   isCyber
                     ? "bg-[#121226] border-[#00f0ff]/30 hover:border-[#00f0ff] text-[#f0f0f5] hover:text-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.15)]"
@@ -580,8 +583,8 @@ export default function App() {
                     isCyber ? "text-[#00f0ff]" : "text-emerald-400"
                   }`}
                 />
-                <span>Email Me</span>
-              </a>
+                <span>Contact Me</span>
+              </button>
 
               <button
                 onClick={copyEmail}
@@ -1115,6 +1118,21 @@ npx gh-pages -d dist`}
             </p>
           </div>
 
+          {/* DIRECT CONTACT FORM LAUNCHER */}
+          <div className="flex justify-center">
+            <button
+              onClick={() => setIsContactOpen(true)}
+              className={`flex items-center gap-2 px-6 py-3.5 rounded-2xl font-mono text-xs font-bold transition-all transform hover:-translate-y-1 hover:scale-105 shadow-xl ${
+                isCyber
+                  ? "bg-[#ff00e5] text-[#05050a] hover:bg-[#ff00e5]/90 shadow-[0_0_25px_rgba(255,0,229,0.5)]"
+                  : "bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+              }`}
+            >
+              <Mail className="w-4 h-4" />
+              <span>TRANSMIT DIRECT MESSAGE (CONTACT FORM)</span>
+            </button>
+          </div>
+
           <div className="flex flex-wrap justify-center items-center gap-4">
             <a
               href="https://github.com/zakiafuadi925-ops"
@@ -1197,6 +1215,13 @@ npx gh-pages -d dist`}
           </div>
         </section>
       </main>
+
+      {/* NEON CYBERPUNK CONTACT MODAL */}
+      <ContactModal
+        isOpen={isContactOpen}
+        onClose={() => setIsContactOpen(false)}
+        isCyber={isCyber}
+      />
     </div>
   );
 }

@@ -306,12 +306,12 @@ export default function ProjectGallery({
             return (
               <div
                 key={proj.id}
-                className={`group relative rounded-2xl border transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-sm ${
+                className={`group relative rounded-2xl border flex flex-col justify-between overflow-hidden backdrop-blur-sm transform transition-all duration-300 hover:scale-[1.02] hover:-translate-y-2 ${
                   isCyber
                     ? isQuant
-                      ? "bg-[#121226]/95 border-[#00f0ff]/40 hover:border-[#00f0ff] hover:shadow-[0_0_25px_rgba(0,240,255,0.3)]"
-                      : "bg-[#121226]/90 border-[#ff00e5]/30 hover:border-[#ff00e5] hover:shadow-[0_0_20px_rgba(255,0,229,0.25)]"
-                    : "bg-slate-900/70 border-slate-800 hover:border-cyan-500/40"
+                      ? "bg-[#121226]/95 border-[#00f0ff]/40 hover:border-[#00f0ff] hover-pulse-cyan"
+                      : "bg-[#121226]/90 border-[#ff00e5]/30 hover:border-[#ff00e5] hover-pulse-pink"
+                    : "bg-slate-900/70 border-slate-800 hover:border-cyan-400 hover:shadow-[0_0_24px_rgba(6,182,212,0.45)]"
                 }`}
               >
                 {/* CYBER HUD CORNER ACCENTS */}
@@ -542,12 +542,12 @@ export default function ProjectGallery({
             return (
               <div
                 key={proj.id}
-                className={`p-6 rounded-2xl border transition-all ${
+                className={`p-6 rounded-2xl border transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 ${
                   isCyber
                     ? isQuant
-                      ? "bg-[#121226]/95 border-[#00f0ff]/40 hover:border-[#00f0ff] hover:shadow-[0_0_20px_rgba(0,240,255,0.2)]"
-                      : "bg-[#121226]/90 border-[#ff00e5]/30 hover:border-[#00f0ff]"
-                    : "bg-slate-900/70 border-slate-800"
+                      ? "bg-[#121226]/95 border-[#00f0ff]/40 hover:border-[#00f0ff] hover-pulse-cyan"
+                      : "bg-[#121226]/90 border-[#ff00e5]/30 hover:border-[#ff00e5] hover-pulse-pink"
+                    : "bg-slate-900/70 border-slate-800 hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.35)]"
                 }`}
               >
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">

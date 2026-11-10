@@ -64,6 +64,23 @@ body {
   animation: pulse-cyan 3s ease-in-out infinite;
 }
 
+/* Card Hover Glow Animations using existing pulse-pink and pulse-cyan */
+.hover-pulse-pink {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.hover-pulse-pink:hover {
+  animation: pulse-pink 1.5s ease-in-out infinite;
+}
+
+.hover-pulse-cyan {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.hover-pulse-cyan:hover {
+  animation: pulse-cyan 1.5s ease-in-out infinite;
+}
+
 /* Infinite Marquee Animation */
 @keyframes marquee-scroll {
   0% {
