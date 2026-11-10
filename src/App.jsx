@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { PROJECTS } from "./data/projects";
 import ProjectGallery from "./components/ProjectGallery";
+import TechMarquee from "./components/TechMarquee";
 
 // --- CUSTOM SVG BRAND ICONS ---
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -486,11 +487,9 @@ export default function App() {
 
       <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 pt-8 pb-20">
         {/* HERO SECTION */}
-        <section
-          id="about"
-          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-6"
-        >
-          <div className="lg:col-span-6 space-y-6">
+        <section id="about" className="space-y-10 pt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-6 space-y-6">
             <div
               className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-mono transition-colors ${
                 isCyber
@@ -777,7 +776,11 @@ export default function App() {
               </form>
             </div>
           </div>
-        </section>
+        </div>
+
+        {/* INFINITE SCROLLING TECH STACK MARQUEE */}
+        <TechMarquee isCyber={isCyber} />
+      </section>
 
         {/* ENGINEERING PRINCIPLES */}
         <section className="space-y-6">
